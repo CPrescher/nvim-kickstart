@@ -11,7 +11,7 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- open netrw explorer
-vim.keymap.set('n', '<leader>e', ':Explore<CR>')
+vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
 -- switch buffers
 vim.keymap.set('n', '<TAB>', '<cmd>bnext<CR>')

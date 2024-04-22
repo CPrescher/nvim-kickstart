@@ -83,6 +83,9 @@ I hope you enjoy your Neovim journey,
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
+-- disable netrw at the very start of the init.vim
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -796,6 +799,20 @@ require('lazy').setup({
     end,
   },
 
+  { -- Add a file explorer to your Neovim
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
+    config = function()
+      require('nvim-tree').setup {
+        update_focused_file = { enable = true },
+        view = {
+          width = 30,
+          side = 'right',
+        },
+      }
+    end,
+  },
+
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -849,3 +866,5 @@ require('null-ls').setup {
     require('null-ls').builtins.formatting.black,
   },
 }
+
+-- setup nvimtree
