@@ -10,6 +10,10 @@ vim.keymap.set('n', 'G', 'Gzz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
+-- move lines
+vim.keymap.set('n', 'J', ':m .+1<CR>')
+vim.keymap.set('n', 'K', ':m .-2<CR>')
+
 -- open netrw explorer
 vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
