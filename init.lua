@@ -358,7 +358,7 @@ require('lazy').setup({
                 ['<c-d>'] = require('telescope.actions').delete_buffer,
               },
               n = {
-                ['d>'] = require('telescope.actions').delete_buffer,
+                ['d'] = require('telescope.actions').delete_buffer,
               },
             },
           },
@@ -380,6 +380,8 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
+      local actions = require 'telescope.actions'
+      local action_state = require 'telescope.actions.state'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -392,22 +394,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorscheme' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
-      local actions = require 'telescope.actions'
-      local action_state = require 'telescope.actions.state'
-
-      -- Modify the built-in buffers picker to include buffer deletion
-      builtin.buffers {
-        attach_mappings = function(prompt_bufnr, map)
-          -- Close buffer on <C-d>
-          map('i', '<C-d>', function()
-            local selection = action_state.get_selected_entry()
-            actions.close(prompt_bufnr)
-            vim.api.nvim_buf_delete(selection.bufnr, { force = true })
-          end)
-          return true
-        end,
-      }
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
