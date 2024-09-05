@@ -15,7 +15,7 @@ vim.keymap.set('n', 'J', ':m .+1<CR>')
 vim.keymap.set('n', 'K', ':m .-2<CR>')
 
 -- open netrw explorer
-vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>e', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
 
 -- switch buffers
 vim.keymap.set('n', '<TAB>', '<cmd>bnext<CR>')

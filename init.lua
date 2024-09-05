@@ -347,14 +347,26 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        defaults = {
-          mappings = {
-            n = {
-              ['d'] = require('telescope.actions').delete_buffer,
+        defaults = {},
+        pickers = {
+          buffers = {
+            sort_mru = true,
+            initial_mode = 'normal',
+            theme = 'dropdown',
+            mappings = {
+              i = {
+                ['<c-d>'] = require('telescope.actions').delete_buffer,
+              },
+              n = {
+                ['d>'] = require('telescope.actions').delete_buffer,
+              },
             },
           },
+          colorscheme = {
+            initial_mode = 'normal',
+            enable_preview = true,
+          },
         },
-        -- pickers = {}
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -376,8 +388,26 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+      vim.keymap.set('n', '<leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld files' })
+      vim.keymap.set('n', '<leader>sc', builtin.colorscheme, { desc = '[S]earch [C]olorscheme' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      local actions = require 'telescope.actions'
+      local action_state = require 'telescope.actions.state'
+
+      -- Modify the built-in buffers picker to include buffer deletion
+      builtin.buffers {
+        attach_mappings = function(prompt_bufnr, map)
+          -- Close buffer on <C-d>
+          map('i', '<C-d>', function()
+            local selection = action_state.get_selected_entry()
+            actions.close(prompt_bufnr)
+            vim.api.nvim_buf_delete(selection.bufnr, { force = true })
+          end)
+          return true
+        end,
+      }
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -719,8 +749,23 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-    'folke/tokyonight.nvim',
+    'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000, -- make sure to load this before all the other start plugins
+  },
+
+  {
+    'folke/tokyonight.nvim',
+    priority = 1000,
+  },
+  {
+    'navarasu/onedark.nvim',
+    priority = 1000,
+  },
+
+  {
+    'scottmckendry/cyberdream.nvim',
+    priority = 1000,
   },
 
   -- Highlight todo, notes, etc in comments
@@ -858,10 +903,32 @@ require('null-ls').setup {
 }
 
 -- setting up tokyonight to be transparent
+-- require('tokyonight').setup {
+--   transparent = true,
+-- }
+-- vim.cmd.colorscheme 'tokyonight-night'
+
+-- setting up nightfox and make it transparent
+
+require('catppuccin').setup {
+  flavour = 'mocha',
+}
+
+require('onedark').setup {
+  transparent = true,
+  style = 'warmer',
+}
+
 require('tokyonight').setup {
   transparent = true,
 }
-vim.cmd.colorscheme 'tokyonight-night'
+
+require('cyberdream').setup {
+  transparent = true,
+  borderless_telescope = false,
+}
+
+vim.cmd.colorscheme 'tokyonight-moon'
 
 --  let NvimTree respect the transparency
 vim.cmd [[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]
